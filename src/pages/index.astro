@@ -1,0 +1,681 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allWork = await getCollection('work');
+const projects = allWork.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Suneel Armstrong — Creative Director & Technologist">
+
+  <main class="page">
+
+    <!-- ======================================================
+         HERO
+    ====================================================== -->
+    <section class="hero">
+      <div class="hero-left">
+        <h1 class="name">Suneel Armstrong</h1>
+        <p class="tagline">Creative Director &amp; Technologist</p>
+
+        <p class="hero-intro">
+          Placeholder description. Suneel to provide a one or two sentence
+          summary about who he is and what he does.
+        </p>
+
+        <div class="quests-block">
+          <h2 class="quests-heading">Main quests</h2>
+          <ul class="quest-list">
+            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
+            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
+            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
+          </ul>
+        </div>
+
+        <div class="quests-block">
+          <h2 class="quests-heading">Side and past quests</h2>
+          <ul class="quest-list">
+            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
+            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
+            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <!-- Video / Photo area -->
+        <div class="video-frame">
+          <!-- Fallback image shown until video loads -->
+          <img
+            src="https://res.cloudinary.com/de0frkjm7/image/upload/w_600,h_800,c_fill,g_face/v1773947883/designer_jteewz.jpg"
+            alt="Suneel Armstrong"
+            class="video-el hero-img"
+            style="opacity:1"
+          />
+          <video
+            id="loop-vid"
+            src="https://res.cloudinary.com/de0frkjm7/video/upload/v1773947799/rest-suneel_ohxtgq.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+            class="video-el"
+            style="opacity:0"
+          ></video>
+          <video
+            id="backflip-vid"
+            src="https://res.cloudinary.com/de0frkjm7/video/upload/v1773947799/backflip-suneel_lalng5.mp4"
+            muted
+            playsinline
+            class="video-el"
+            style="opacity:0"
+          ></video>
+        </div>
+        <div class="btn-wrap">
+          <button id="backflip-btn" class="pill-btn">Backflip</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         FEATURED WORK
+    ====================================================== -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">Featured Work</h2>
+        <a href="#" class="pill-outline">see all &rarr;</a>
+      </div>
+
+      <div class="work-list">
+        {projects.map((project) => (
+          <a href={`/work/${project.id}`} class="work-card">
+            <div class="work-thumb">
+              {project.data.thumbnail
+                ? <img src={project.data.thumbnail} alt={project.data.title} />
+                : <span class="ph-label">Image</span>
+              }
+            </div>
+            <div class="work-info">
+              <div>
+                <h3 class="work-title">{project.data.title}</h3>
+                <p class="work-desc">{project.data.description}</p>
+              </div>
+              <div class="work-actions">
+                {project.data.watchLink && (
+                  <a
+                    href={project.data.watchLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="ext-icon"
+                    onclick="event.stopPropagation()"
+                    title="Watch"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ======================================================
+         I WRITE (Thoughts)
+    ====================================================== -->
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">I write</h2>
+          <p class="section-sub">Notes on creativity, technology, and making things.</p>
+        </div>
+        <a href="#" class="pill-outline">read more &rarr;</a>
+      </div>
+
+      <div class="writing-list">
+        {[
+          { title: 'Why Creative Directors Should Learn to Code', date: '03 Jan 2025', url: '#' },
+          { title: 'The Death of the Mood Board', date: '04 Nov 2024', url: '#' },
+          { title: 'What Hackathons Taught Me About Storytelling', date: '01 Sep 2024', url: '#' },
+        ].map((a) => (
+          <a href={a.url} target="_blank" rel="noopener noreferrer" class="article-row">
+            <span class="article-title">{a.title}</span>
+            <span class="article-date">{a.date}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="show-more">
+        <a href="#" class="muted-link">show all posts &darr;</a>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PROUD SIDE QUESTS
+    ====================================================== -->
+    <section class="section">
+      <h2 class="section-title" style="margin-bottom:0.5rem;">Proud Side Quests</h2>
+      <p class="section-sub" style="margin-bottom:1.5rem;">
+        Things I built, won, or showed up to that I'm quietly proud of.
+      </p>
+
+      <div class="photo-scroll">
+        {[
+          { label: 'N8N Japan Hackathon', sub: 'Tokyo, 2024' },
+          { label: 'LeetCode Top 10%', sub: 'Globally' },
+          { label: 'Events I\'ve Hosted', sub: '200+ people' },
+          { label: 'N8N Japan Hackathon', sub: 'Tokyo, 2024' },
+          { label: 'LeetCode Top 10%', sub: 'Globally' },
+          { label: 'Events I\'ve Hosted', sub: '200+ people' },
+        ].map((card) => (
+          <div class="photo-card">
+            <div class="photo-img">
+              <span class="ph-label" style="color:rgba(255,255,255,0.4);">Photo</span>
+            </div>
+            <div class="photo-caption">
+              <span class="photo-label">{card.label}</span>
+              <span class="photo-sub">{card.sub}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SAY HI / FOOTER
+    ====================================================== -->
+    <section class="section">
+      <h2 class="section-title" style="margin-bottom:1.5rem;">Say hi!</h2>
+
+      <div class="contact-box">
+        <p class="contact-msg">
+          Whether you're a brand looking for creative direction, a founder with a
+          story worth telling, or you just want to talk — I'm genuinely happy to
+          hear from you.
+        </p>
+        <ul class="contact-list">
+          <li>&bull; <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="contact-link">Twitter / X DMs</a> are open (I actually check them)</li>
+          <li>&bull; <a href="mailto:suneel@example.com" class="contact-link">Drop me an email</a> if you've got something longer to say</li>
+        </ul>
+        <p class="contact-sign">See you around!</p>
+      </div>
+    </section>
+
+  </main>
+
+</Layout>
+
+<script>
+  const btn = document.getElementById('backflip-btn') as HTMLButtonElement | null;
+  const loopVid = document.getElementById('loop-vid') as HTMLVideoElement | null;
+  const backflipVid = document.getElementById('backflip-vid') as HTMLVideoElement | null;
+  const heroImg = document.querySelector('.hero-img') as HTMLImageElement | null;
+
+  // Once loop video can play, hide fallback image and show video
+  if (loopVid) {
+    loopVid.addEventListener('canplay', () => {
+      if (heroImg) heroImg.style.opacity = '0';
+      loopVid.style.opacity = '1';
+    }, { once: true });
+  }
+
+  if (btn && loopVid && backflipVid) {
+    btn.addEventListener('click', () => {
+loopVid.pause();
+      loopVid.style.opacity = '0';
+      backflipVid.style.opacity = '1';
+      backflipVid.play();
+      backflipVid.addEventListener('ended', () => {
+        backflipVid.currentTime = 0;
+        backflipVid.style.opacity = '0';
+        loopVid.style.opacity = '1';
+        loopVid.play();
+      }, { once: true });
+    });
+  }
+</script>
+
+<style>
+  /* ---- Base ---- */
+  .page {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  /* ---- Hero ---- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 4rem;
+    align-items: start;
+    margin-bottom: 5rem;
+  }
+
+  .name {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #1C1A17;
+    margin: 0 0 0.35rem 0;
+    line-height: 1.1;
+  }
+
+  .tagline {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(28, 26, 23, 0.55);
+    margin: 0 0 1.5rem 0;
+    letter-spacing: 0.01em;
+  }
+
+  .hero-intro {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(28, 26, 23, 0.8);
+    margin: 0 0 2rem 0;
+  }
+
+  .quests-block {
+    margin-bottom: 1.5rem;
+  }
+
+  .quests-heading {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1C1A17;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .quest-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .quest-list li {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.875rem;
+    color: rgba(28, 26, 23, 0.75);
+    line-height: 1.55;
+  }
+
+  /* Video */
+  .hero-right {
+    position: sticky;
+    top: 2rem;
+  }
+
+  .video-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: #E8E4DD;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .video-el {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(28, 26, 23, 0.25);
+  }
+
+  .btn-wrap {
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+
+  .pill-btn {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #C17B3A;
+    border: 1.5px solid #C17B3A;
+    background: transparent;
+    padding: 0.5rem 1.75rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .pill-btn:hover {
+    background: #C17B3A;
+    color: #fff;
+  }
+
+  /* ---- Sections ---- */
+  .section {
+    margin-bottom: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(28, 26, 23, 0.08);
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .section-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: #1C1A17;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .section-sub {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(28, 26, 23, 0.55);
+    margin: 0.4rem 0 0 0;
+    line-height: 1.5;
+  }
+
+  .pill-outline {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #C17B3A;
+    border: 1.5px solid #C17B3A;
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+    align-self: flex-start;
+    margin-top: 0.1rem;
+  }
+  .pill-outline:hover {
+    background: #C17B3A;
+    color: #fff;
+  }
+
+  /* ---- Work ---- */
+  .work-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .work-card {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 1px solid rgba(28, 26, 23, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: border-color 0.18s, background 0.18s;
+    background: #fff;
+  }
+  .work-card:hover {
+    border-color: rgba(28, 26, 23, 0.2);
+    background: #fafaf9;
+  }
+
+  .work-thumb {
+    width: 260px;
+    flex-shrink: 0;
+    background: #E8E4DD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .work-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ph-label {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(28, 26, 23, 0.25);
+  }
+
+  .work-info {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .work-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #1C1A17;
+    margin: 0 0 0.4rem 0;
+    line-height: 1.2;
+  }
+
+  .work-desc {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.825rem;
+    color: rgba(28, 26, 23, 0.6);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .work-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .ext-icon {
+    color: rgba(28, 26, 23, 0.35);
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+  }
+  .ext-icon:hover { color: #C17B3A; }
+
+  /* ---- Writing ---- */
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .article-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(28, 26, 23, 0.06);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .article-row:first-child { border-top: 1px solid rgba(28, 26, 23, 0.06); }
+
+  .article-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1C1A17;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .article-row:hover .article-title { color: #C17B3A; }
+
+  .article-date {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(28, 26, 23, 0.4);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .show-more {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .muted-link {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(28, 26, 23, 0.45);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .muted-link:hover { color: #1C1A17; }
+
+  /* ---- Photo scroll ---- */
+  .photo-scroll {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .photo-scroll::-webkit-scrollbar { display: none; }
+
+  .photo-card {
+    flex-shrink: 0;
+    width: 260px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(28, 26, 23, 0.08);
+  }
+
+  .photo-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 0.875rem 0.875rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .photo-label {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .photo-sub {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  /* ---- Contact box ---- */
+  .contact-box {
+    border: 1px solid rgba(28, 26, 23, 0.12);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    background: #fff;
+  }
+
+  .contact-msg {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(28, 26, 23, 0.8);
+    margin: 0 0 1.25rem 0;
+  }
+
+  .contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .contact-list li {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.875rem;
+    color: rgba(28, 26, 23, 0.75);
+    line-height: 1.5;
+  }
+
+  .contact-link {
+    color: #C17B3A;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: opacity 0.15s;
+  }
+  .contact-link:hover { opacity: 0.7; }
+
+  .contact-sign {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.875rem;
+    color: #1C1A17;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 720px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .hero-right { position: static; }
+    .work-thumb { width: 120px; }
+    .section-head { flex-direction: column; }
+  }
+
+  @media (max-width: 500px) {
+    .work-card { flex-direction: column; }
+    .work-thumb { width: 100%; aspect-ratio: 16/9; }
+  }
+</style>
