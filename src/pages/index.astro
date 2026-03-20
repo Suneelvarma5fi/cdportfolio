@@ -15,7 +15,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     ====================================================== -->
     <section class="hero">
       <div class="hero-left">
-        <h1 class="name">Suneel Armstrong</h1>
+        <h1 class="name">SUNEEL ARMSTRONG</h1>
         <p class="tagline">Creative Director &amp; Technologist</p>
 
         <p class="hero-intro">
@@ -67,6 +67,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
             src="https://res.cloudinary.com/de0frkjm7/video/upload/v1773947799/backflip-suneel_lalng5.mp4"
             muted
             playsinline
+            preload="auto"
             class="video-el"
             style="opacity:0"
           ></video>
@@ -83,18 +84,22 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     <section class="section">
       <div class="section-head">
         <h2 class="section-title">Featured Work</h2>
-        <a href="#" class="pill-outline">see all &rarr;</a>
+        <a href="/work" class="pill-outline">see all &rarr;</a>
       </div>
 
       <div class="work-list">
         {projects.map((project) => (
-          <a href={`/work/${project.id}`} class="work-card">
+          <article class="work-card">
+            {/* Full-cover link for the card — avoids nested <a> invalid HTML */}
+            <a href={`/work/${project.id}`} class="card-cover-link" aria-label={project.data.title}></a>
+
             <div class="work-thumb">
               {project.data.thumbnail
                 ? <img src={project.data.thumbnail} alt={project.data.title} />
                 : <span class="ph-label">Image</span>
               }
             </div>
+
             <div class="work-info">
               <div>
                 <h3 class="work-title">{project.data.title}</h3>
@@ -107,7 +112,6 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
                     target="_blank"
                     rel="noopener noreferrer"
                     class="ext-icon"
-                    onclick="event.stopPropagation()"
                     title="Watch"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -117,9 +121,10 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
                     </svg>
                   </a>
                 )}
+                <a href={`/work/${project.id}`} class="deep-dive-link">Deep Dive &rarr;</a>
               </div>
             </div>
-          </a>
+          </article>
         ))}
       </div>
     </section>
@@ -224,16 +229,32 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   }
 
   if (btn && loopVid && backflipVid) {
-    btn.addEventListener('click', () => {
-loopVid.pause();
-      loopVid.style.opacity = '0';
+    // Preload backflip video silently so it's ready instantly on click
+    backflipVid.load();
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      backflipVid.currentTime = 0;
+
+      // Start backflip playing while loop is STILL fully visible
+      try { await backflipVid.play(); } catch (_) {}
+
+      // Fade backflip IN on top — loop stays at opacity:1 underneath the whole time
+      // This means there is always 100% opaque video showing — no black frame ever
       backflipVid.style.opacity = '1';
-      backflipVid.play();
+
+      // Only pause loop AFTER the CSS transition finishes (300ms matches transition: opacity 0.3s)
+      setTimeout(() => loopVid.pause(), 300);
+
       backflipVid.addEventListener('ended', () => {
-        backflipVid.currentTime = 0;
-        backflipVid.style.opacity = '0';
-        loopVid.style.opacity = '1';
+        // Restart loop while backflip is still fully visible on top
         loopVid.play();
+        loopVid.style.opacity = '1';
+        // Only hide backflip after loop transition is done
+        setTimeout(() => {
+          backflipVid.style.opacity = '0';
+          btn.disabled = false;
+        }, 300);
       }, { once: true });
     });
   }
@@ -258,19 +279,22 @@ loopVid.pause();
 
   .name {
     font-family: 'Black Han Sans', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1.4rem, 3.2vw, 2.2rem);
     font-weight: 600;
     color: #1C1A17;
     margin: 0 0 0.35rem 0;
-    line-height: 1.1;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .tagline {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.8rem;
-    color: rgba(28, 26, 23, 0.55);
+    font-size: 0.72rem;
+    color: #C9503A;
     margin: 0 0 1.5rem 0;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   .hero-intro {
@@ -358,16 +382,18 @@ loopVid.pause();
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #C17B3A;
-    border: 1.5px solid #C17B3A;
-    background: transparent;
+    color: #C9503A;
+    border: 1.5px solid #C9503A;
+    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
     padding: 0.5rem 1.75rem;
-    border-radius: 999px;
+    border-radius: 0;
     cursor: pointer;
-    transition: background 0.18s, color 0.18s;
+    transition: background-position 0.35s ease, color 0.35s ease;
   }
   .pill-btn:hover {
-    background: #C17B3A;
+    background-position: 0% 0;
     color: #fff;
   }
 
@@ -388,9 +414,9 @@ loopVid.pause();
   }
 
   .section-title {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
+    font-weight: 700;
     color: #1C1A17;
     margin: 0;
     line-height: 1;
@@ -407,20 +433,23 @@ loopVid.pause();
   .pill-outline {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.06em;
-    color: #C17B3A;
-    border: 1.5px solid #C17B3A;
-    border-radius: 999px;
+    color: #C9503A;
+    border: 1.5px solid #C9503A;
+    border-radius: 0;
     padding: 0.4rem 1.1rem;
     text-decoration: none;
     white-space: nowrap;
-    transition: background 0.18s, color 0.18s;
+    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
+    transition: background-position 0.35s ease, color 0.35s ease;
     align-self: flex-start;
     margin-top: 0.1rem;
   }
   .pill-outline:hover {
-    background: #C17B3A;
+    background-position: 0% 0;
     color: #fff;
   }
 
@@ -438,7 +467,7 @@ loopVid.pause();
     border: 1px solid rgba(28, 26, 23, 0.1);
     border-radius: 12px;
     overflow: hidden;
-    text-decoration: none;
+    position: relative;
     transition: border-color 0.18s, background 0.18s;
     background: #fff;
   }
@@ -446,6 +475,36 @@ loopVid.pause();
     border-color: rgba(28, 26, 23, 0.2);
     background: #fafaf9;
   }
+
+  /* Full-cover invisible link — sits above card, below action links */
+  .card-cover-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* Action links float above the cover link */
+  .work-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .deep-dive-link {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C9503A;
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.15s;
+  }
+  .deep-dive-link:hover { opacity: 0.7; }
 
   .work-thumb {
     width: 260px;
@@ -480,9 +539,9 @@ loopVid.pause();
   }
 
   .work-title {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 700;
     color: #1C1A17;
     margin: 0 0 0.4rem 0;
     line-height: 1.2;
@@ -496,18 +555,13 @@ loopVid.pause();
     line-height: 1.6;
   }
 
-  .work-actions {
-    display: flex;
-    gap: 0.75rem;
-  }
-
   .ext-icon {
     color: rgba(28, 26, 23, 0.35);
     transition: color 0.15s;
     display: flex;
     align-items: center;
   }
-  .ext-icon:hover { color: #C17B3A; }
+  .ext-icon:hover { color: #C9503A; }
 
   /* ---- Writing ---- */
   .writing-list {
@@ -536,7 +590,7 @@ loopVid.pause();
     line-height: 1.4;
     transition: color 0.15s;
   }
-  .article-row:hover .article-title { color: #C17B3A; }
+  .article-row:hover .article-title { color: #4A6FAD; text-decoration: underline; text-underline-offset: 3px; }
 
   .article-date {
     font-family: 'Noto Sans', sans-serif;
@@ -647,10 +701,10 @@ loopVid.pause();
   }
 
   .contact-link {
-    color: #C17B3A;
+    color: #4A6FAD;
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: 1.5px;
     transition: opacity 0.15s;
   }
   .contact-link:hover { opacity: 0.7; }

@@ -2,7 +2,7 @@
 title: "Project Two"
 category: "Art Direction"
 description: "An immersive experience that merged physical installation with digital storytelling for a global audience."
-thumbnail: "/images/placeholder.jpg"
+thumbnail: "https://res.cloudinary.com/de0frkjm7/image/upload/v1757275891/New%20Project%202/locations/Elias%27s_Secret_Garden_medium_shot.png"
 watchLink: "https://vimeo.com"
 order: 2
 ---

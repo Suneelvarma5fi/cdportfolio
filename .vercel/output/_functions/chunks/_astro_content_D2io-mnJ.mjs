@@ -1,6 +1,6 @@
-import { c as createComponent, V as VALID_INPUT_FORMATS } from './consts_C9BUAdWh.mjs';
+import { c as createComponent, V as VALID_INPUT_FORMATS } from './consts_Byw_xXZq.mjs';
 import 'piccolore';
-import { e as renderElement, d as addAttribute, f as renderHead, g as renderSlot, b as renderTemplate, h as generateCspDigest, s as spreadAttributes, u as unescapeHTML, j as removeBase, i as isRemotePath, A as AstroError, R as RenderUndefinedEntryError, U as UnknownContentCollectionError, p as prependForwardSlash, k as createHeadAndContent, r as renderComponent } from './entrypoint_-VAv5VyE.mjs';
+import { e as renderElement, c as addAttribute, f as renderHead, g as renderSlot, b as renderTemplate, h as generateCspDigest, s as spreadAttributes, u as unescapeHTML, j as removeBase, i as isRemotePath, A as AstroError, R as RenderUndefinedEntryError, U as UnknownContentCollectionError, p as prependForwardSlash, k as createHeadAndContent, r as renderComponent } from './entrypoint_gk7PdndW.mjs';
 import 'clsx';
 import { escape } from 'html-escaper';
 import { Traverse } from 'neotraverse/modern';
@@ -31,7 +31,7 @@ const $$Layout = createComponent(($$result, $$props, $$slots) => {
     title = "Suneel Armstrong — Creative Director & Technologist",
     description = "Portfolio of Suneel Armstrong, Creative Director and Technologist."
   } = Astro2.props;
-  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description"${addAttribute(description, "content")}><title>${title}</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">${renderHead()}</head> <body style="background-color: #ffffff; color: #1E2A3A; font-family: 'Noto Sans', sans-serif;"> ${renderSlot($$result, $$slots["default"])}</body></html>`;
+  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description"${addAttribute(description, "content")}><title>${title}</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">${renderHead()}</head> <body style="background-color: #ffffff; color: #1C1A17; font-family: 'Noto Sans', sans-serif;"> ${renderSlot($$result, $$slots["default"])}</body></html>`;
 }, "/Users/thesuneelvarma/one-more-dot/cdportfolio/src/layouts/Layout.astro", void 0);
 
 function createSvgComponent({ meta, attributes, children, styles }) {
@@ -125,7 +125,7 @@ class ImmutableDataStore {
    */
   static async fromModule() {
     try {
-      const data = await import('./_astro_data-layer-content_BLsMaiKB.mjs');
+      const data = await import('./_astro_data-layer-content_BLKEfpaW.mjs');
       if (data.default instanceof Map) {
         return ImmutableDataStore.fromMap(data.default);
       }
@@ -203,7 +203,7 @@ const CONTENT_LAYER_IMAGE_REGEX = /__ASTRO_IMAGE_="([^"]+)"/g;
 async function updateImageReferencesInBody(html, fileName) {
   const { default: imageAssetMap } = await import('./content-assets_DleWbedO.mjs');
   const imageObjects = /* @__PURE__ */ new Map();
-  const { getImage } = await import('./_astro_assets_DL6_BtI4.mjs').then(n => n._);
+  const { getImage } = await import('./_astro_assets_D3Je7JHy.mjs').then(n => n._);
   for (const [_full, imagePath] of html.matchAll(CONTENT_LAYER_IMAGE_REGEX)) {
     try {
       const decodedImagePath = JSON.parse(imagePath.replaceAll("&#x22;", '"'));

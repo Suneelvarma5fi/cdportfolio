@@ -2,7 +2,7 @@
 title: "Project One"
 category: "Creative Direction"
 description: "A bold campaign that redefined the brand's visual language across digital and physical touchpoints."
-thumbnail: "/images/placeholder.jpg"
+thumbnail: "https://res.cloudinary.com/de0frkjm7/image/upload/v1757275891/New%20Project%202/locations/Elias%27s_Secret_Garden_medium_shot.png"
 watchLink: "https://vimeo.com"
 order: 1
 ---

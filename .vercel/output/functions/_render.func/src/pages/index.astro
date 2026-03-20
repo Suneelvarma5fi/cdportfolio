@@ -15,7 +15,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     ====================================================== -->
     <section class="hero">
       <div class="hero-left">
-        <h1 class="name">Suneel Armstrong</h1>
+        <h1 class="name">SUNEEL ARMSTRONG</h1>
         <p class="tagline">Creative Director &amp; Technologist</p>
 
         <p class="hero-intro">
@@ -67,6 +67,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
             src="https://res.cloudinary.com/de0frkjm7/video/upload/v1773947799/backflip-suneel_lalng5.mp4"
             muted
             playsinline
+            preload="auto"
             class="video-el"
             style="opacity:0"
           ></video>
@@ -83,18 +84,22 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     <section class="section">
       <div class="section-head">
         <h2 class="section-title">Featured Work</h2>
-        <a href="#" class="pill-outline">see all &rarr;</a>
+        <a href="/work" class="pill-outline">see all &rarr;</a>
       </div>
 
       <div class="work-list">
         {projects.map((project) => (
-          <a href={`/work/${project.id}`} class="work-card">
+          <article class="work-card">
+            {/* Full-cover link for the card — avoids nested <a> invalid HTML */}
+            <a href={`/work/${project.id}`} class="card-cover-link" aria-label={project.data.title}></a>
+
             <div class="work-thumb">
               {project.data.thumbnail
                 ? <img src={project.data.thumbnail} alt={project.data.title} />
                 : <span class="ph-label">Image</span>
               }
             </div>
+
             <div class="work-info">
               <div>
                 <h3 class="work-title">{project.data.title}</h3>
@@ -107,7 +112,6 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
                     target="_blank"
                     rel="noopener noreferrer"
                     class="ext-icon"
-                    onclick="event.stopPropagation()"
                     title="Watch"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -117,9 +121,10 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
                     </svg>
                   </a>
                 )}
+                <a href={`/work/${project.id}`} class="deep-dive-link">Deep Dive &rarr;</a>
               </div>
             </div>
-          </a>
+          </article>
         ))}
       </div>
     </section>
@@ -224,38 +229,43 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   }
 
   if (btn && loopVid && backflipVid) {
-    btn.addEventListener('click', () => {
-loopVid.pause();
-      loopVid.style.opacity = '0';
+    // Preload backflip video silently so it's ready instantly on click
+    backflipVid.load();
+
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      backflipVid.currentTime = 0;
+
+      // Start backflip playing while loop is STILL fully visible
+      try { await backflipVid.play(); } catch (_) {}
+
+      // Fade backflip IN on top — loop stays at opacity:1 underneath the whole time
+      // This means there is always 100% opaque video showing — no black frame ever
       backflipVid.style.opacity = '1';
-      backflipVid.play();
+
+      // Only pause loop AFTER the CSS transition finishes (300ms matches transition: opacity 0.3s)
+      setTimeout(() => loopVid.pause(), 300);
+
       backflipVid.addEventListener('ended', () => {
-        backflipVid.currentTime = 0;
-        backflipVid.style.opacity = '0';
-        loopVid.style.opacity = '1';
+        // Restart loop while backflip is still fully visible on top
         loopVid.play();
+        loopVid.style.opacity = '1';
+        // Only hide backflip after loop transition is done
+        setTimeout(() => {
+          backflipVid.style.opacity = '0';
+          btn.disabled = false;
+        }, 300);
       }, { once: true });
     });
   }
 </script>
 
 <style>
-  /* ============================================================
-     COLOR TOKENS
-     --bg:       #FFFFFF   Background
-     --card:     #F2EEE8   Cards / Sections
-     --heading:  #A33B2A   Primary Headings
-     --body:     #1E2A3A   Body Text
-     --cta:      #E8A520   CTA Buttons
-     --accent:   #4A6FAD   Links / Hover
-     --hero-bg:  #C9503A   Hero Block
-  ============================================================ */
-
   /* ---- Base ---- */
   .page {
     max-width: 52rem;
     margin: 0 auto;
-    padding: 0 1.5rem 6rem;
+    padding: 3rem 1.5rem 6rem;
   }
 
   /* ---- Hero ---- */
@@ -265,34 +275,33 @@ loopVid.pause();
     gap: 4rem;
     align-items: start;
     margin-bottom: 5rem;
-    background: #C9503A;
-    border-radius: 16px;
-    padding: 3rem;
-    margin-top: 2rem;
   }
 
   .name {
     font-family: 'Black Han Sans', sans-serif;
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: clamp(1.4rem, 3.2vw, 2.2rem);
     font-weight: 600;
-    color: #fff;
+    color: #1C1A17;
     margin: 0 0 0.35rem 0;
-    line-height: 1.1;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .tagline {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.72rem;
+    color: #C9503A;
     margin: 0 0 1.5rem 0;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   .hero-intro {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.95rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(28, 26, 23, 0.8);
     margin: 0 0 2rem 0;
   }
 
@@ -304,7 +313,7 @@ loopVid.pause();
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: #1C1A17;
     margin: 0 0 0.6rem 0;
   }
 
@@ -320,7 +329,7 @@ loopVid.pause();
   .quest-list li {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(28, 26, 23, 0.75);
     line-height: 1.55;
   }
 
@@ -334,7 +343,7 @@ loopVid.pause();
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
-    background: rgba(0,0,0,0.2);
+    background: #E8E4DD;
     border-radius: 12px;
     overflow: hidden;
   }
@@ -359,7 +368,7 @@ loopVid.pause();
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(28, 26, 23, 0.25);
   }
 
   .btn-wrap {
@@ -373,21 +382,26 @@ loopVid.pause();
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #1E2A3A;
-    background: #E8A520;
-    border: none;
+    color: #C9503A;
+    border: 1.5px solid #C9503A;
+    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
     padding: 0.5rem 1.75rem;
-    border-radius: 999px;
+    border-radius: 0;
     cursor: pointer;
-    transition: opacity 0.18s;
+    transition: background-position 0.35s ease, color 0.35s ease;
   }
-  .pill-btn:hover { opacity: 0.85; }
+  .pill-btn:hover {
+    background-position: 0% 0;
+    color: #fff;
+  }
 
   /* ---- Sections ---- */
   .section {
     margin-bottom: 4rem;
     padding-top: 3rem;
-    border-top: 1px solid rgba(30, 42, 58, 0.08);
+    border-top: 1px solid rgba(28, 26, 23, 0.08);
   }
 
   .section-head {
@@ -400,10 +414,10 @@ loopVid.pause();
   }
 
   .section-title {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
-    color: #A33B2A;
+    font-weight: 700;
+    color: #1C1A17;
     margin: 0;
     line-height: 1;
   }
@@ -411,7 +425,7 @@ loopVid.pause();
   .section-sub {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.85rem;
-    color: rgba(30, 42, 58, 0.55);
+    color: rgba(28, 26, 23, 0.55);
     margin: 0.4rem 0 0 0;
     line-height: 1.5;
   }
@@ -421,18 +435,23 @@ loopVid.pause();
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.06em;
-    color: #1E2A3A;
-    background: #E8A520;
-    border: none;
-    border-radius: 999px;
+    color: #C9503A;
+    border: 1.5px solid #C9503A;
+    border-radius: 0;
     padding: 0.4rem 1.1rem;
     text-decoration: none;
     white-space: nowrap;
-    transition: opacity 0.18s;
+    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
+    transition: background-position 0.35s ease, color 0.35s ease;
     align-self: flex-start;
     margin-top: 0.1rem;
   }
-  .pill-outline:hover { opacity: 0.85; }
+  .pill-outline:hover {
+    background-position: 0% 0;
+    color: #fff;
+  }
 
   /* ---- Work ---- */
   .work-list {
@@ -445,21 +464,52 @@ loopVid.pause();
     display: flex;
     align-items: stretch;
     gap: 0;
-    border: 1px solid rgba(30, 42, 58, 0.1);
+    border: 1px solid rgba(28, 26, 23, 0.1);
     border-radius: 12px;
     overflow: hidden;
-    text-decoration: none;
+    position: relative;
     transition: border-color 0.18s, background 0.18s;
-    background: #F2EEE8;
+    background: #fff;
   }
   .work-card:hover {
-    border-color: #4A6FAD;
+    border-color: rgba(28, 26, 23, 0.2);
+    background: #fafaf9;
   }
+
+  /* Full-cover invisible link — sits above card, below action links */
+  .card-cover-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  /* Action links float above the cover link */
+  .work-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .deep-dive-link {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C9503A;
+    text-decoration: none;
+    position: relative;
+    z-index: 2;
+    transition: opacity 0.15s;
+  }
+  .deep-dive-link:hover { opacity: 0.7; }
 
   .work-thumb {
     width: 260px;
     flex-shrink: 0;
-    background: #ddd8d0;
+    background: #E8E4DD;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -476,7 +526,7 @@ loopVid.pause();
     font-size: 0.6rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(30, 42, 58, 0.3);
+    color: rgba(28, 26, 23, 0.25);
   }
 
   .work-info {
@@ -489,10 +539,10 @@ loopVid.pause();
   }
 
   .work-title {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size: 1.4rem;
-    font-weight: 600;
-    color: #A33B2A;
+    font-weight: 700;
+    color: #1C1A17;
     margin: 0 0 0.4rem 0;
     line-height: 1.2;
   }
@@ -500,23 +550,18 @@ loopVid.pause();
   .work-desc {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.825rem;
-    color: rgba(30, 42, 58, 0.7);
+    color: rgba(28, 26, 23, 0.6);
     margin: 0;
     line-height: 1.6;
   }
 
-  .work-actions {
-    display: flex;
-    gap: 0.75rem;
-  }
-
   .ext-icon {
-    color: rgba(30, 42, 58, 0.35);
+    color: rgba(28, 26, 23, 0.35);
     transition: color 0.15s;
     display: flex;
     align-items: center;
   }
-  .ext-icon:hover { color: #4A6FAD; }
+  .ext-icon:hover { color: #C9503A; }
 
   /* ---- Writing ---- */
   .writing-list {
@@ -531,26 +576,26 @@ loopVid.pause();
     justify-content: space-between;
     gap: 2rem;
     padding: 0.9rem 0;
-    border-bottom: 1px solid rgba(30, 42, 58, 0.07);
+    border-bottom: 1px solid rgba(28, 26, 23, 0.06);
     text-decoration: none;
     transition: color 0.15s;
   }
-  .article-row:first-child { border-top: 1px solid rgba(30, 42, 58, 0.07); }
+  .article-row:first-child { border-top: 1px solid rgba(28, 26, 23, 0.06); }
 
   .article-title {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #1E2A3A;
+    color: #1C1A17;
     line-height: 1.4;
     transition: color 0.15s;
   }
-  .article-row:hover .article-title { color: #4A6FAD; }
+  .article-row:hover .article-title { color: #4A6FAD; text-decoration: underline; text-underline-offset: 3px; }
 
   .article-date {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.75rem;
-    color: rgba(30, 42, 58, 0.4);
+    color: rgba(28, 26, 23, 0.4);
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -563,11 +608,11 @@ loopVid.pause();
   .muted-link {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.8rem;
-    color: rgba(30, 42, 58, 0.45);
+    color: rgba(28, 26, 23, 0.45);
     text-decoration: none;
     transition: color 0.15s;
   }
-  .muted-link:hover { color: #4A6FAD; }
+  .muted-link:hover { color: #1C1A17; }
 
   /* ---- Photo scroll ---- */
   .photo-scroll {
@@ -586,7 +631,7 @@ loopVid.pause();
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(30, 42, 58, 0.08);
+    border: 1px solid rgba(28, 26, 23, 0.08);
   }
 
   .photo-img {
@@ -625,17 +670,17 @@ loopVid.pause();
 
   /* ---- Contact box ---- */
   .contact-box {
-    border: 1px solid rgba(30, 42, 58, 0.12);
+    border: 1px solid rgba(28, 26, 23, 0.12);
     border-radius: 12px;
     padding: 1.75rem 2rem;
-    background: #F2EEE8;
+    background: #fff;
   }
 
   .contact-msg {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.9rem;
     line-height: 1.7;
-    color: rgba(30, 42, 58, 0.8);
+    color: rgba(28, 26, 23, 0.8);
     margin: 0 0 1.25rem 0;
   }
 
@@ -651,7 +696,7 @@ loopVid.pause();
   .contact-list li {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.875rem;
-    color: rgba(30, 42, 58, 0.75);
+    color: rgba(28, 26, 23, 0.75);
     line-height: 1.5;
   }
 
@@ -659,7 +704,7 @@ loopVid.pause();
     color: #4A6FAD;
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
+    text-decoration-thickness: 1.5px;
     transition: opacity 0.15s;
   }
   .contact-link:hover { opacity: 0.7; }
@@ -667,7 +712,7 @@ loopVid.pause();
   .contact-sign {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.875rem;
-    color: #1E2A3A;
+    color: #1C1A17;
     font-weight: 600;
     margin: 0;
   }
@@ -677,7 +722,6 @@ loopVid.pause();
     .hero {
       grid-template-columns: 1fr;
       gap: 2.5rem;
-      padding: 2rem;
     }
     .hero-right { position: static; }
     .work-thumb { width: 120px; }
