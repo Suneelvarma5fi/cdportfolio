@@ -15,39 +15,84 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     <p class="page-sub">A selection of projects across creative direction, film, and technology.</p>
 
     <div class="work-list">
-      {projects.map((project) => (
-        <a href={`/work/${project.id}`} class="work-card">
-          <div class="work-thumb">
+      {projects.map((project, i) => (
+        <article class="work-card" data-index={i}>
+          {/* Cover button — triggers modal, no nested <a> */}
+          <button class="card-cover-btn" aria-label={`Read more about ${project.data.title}`}></button>
+
+          {/* Layer 1: ambient blurred bg */}
+          {project.data.thumbnail && (
+            <div class="card-ambient" style={`background-image: url('${project.data.thumbnail}')`}></div>
+          )}
+
+          {/* Layer 2: sharp image with mask fade */}
+          <div class="card-img-wrap">
             {project.data.thumbnail
-              ? <img src={project.data.thumbnail} alt={project.data.title} />
-              : <span class="ph-label">Image</span>
+              ? <img src={project.data.thumbnail} alt={project.data.title} class="card-img" />
+              : <div class="card-img-ph"></div>
             }
           </div>
-          <div class="work-info">
-            <div>
-              <span class="work-category">{project.data.category}</span>
-              <h2 class="work-title">{project.data.title}</h2>
-              <p class="work-desc">{project.data.description}</p>
-            </div>
-            <div class="work-links">
+
+          {/* Layer 3: glass content */}
+          <div class="card-glass">
+            <h2 class="card-title">{project.data.title}</h2>
+            <p class="card-sub">{project.data.description}</p>
+            <div class="card-actions">
               {project.data.watchLink && (
                 <a
                   href={project.data.watchLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="btn-outline"
-                  onclick="event.stopPropagation()"
-                >Watch &rarr;</a>
+                  class="watch-btn"
+                >Watch</a>
               )}
-              <span class="btn-outline">Deep Dive &rarr;</span>
             </div>
           </div>
-        </a>
+        </article>
       ))}
     </div>
 
   </main>
+
+  {/* Modals */}
+  {projects.map((project, i) => (
+    <dialog id={`modal-${i}`} class="project-modal">
+      <div class="modal-inner">
+        <button class="modal-close" data-close={i}>&times;</button>
+        <h2 class="modal-title">{project.data.title}</h2>
+        <p class="modal-body">{project.data.longDescription ?? project.data.description}</p>
+        <div class="modal-actions">
+          {project.data.watchLink && (
+            <a href={project.data.watchLink} target="_blank" rel="noopener noreferrer" class="watch-btn">Watch</a>
+          )}
+        </div>
+      </div>
+    </dialog>
+  ))}
 </Layout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.work-card').forEach((card) => {
+    const idx = card.dataset.index!;
+    const modal = document.getElementById(`modal-${idx}`) as HTMLDialogElement | null;
+    const btn = card.querySelector('.card-cover-btn') as HTMLButtonElement | null;
+    btn?.addEventListener('click', () => modal?.showModal());
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-close]').forEach((btn) => {
+    const modal = document.getElementById(`modal-${btn.dataset.close}`) as HTMLDialogElement | null;
+    btn.addEventListener('click', () => modal?.close());
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.project-modal').forEach((modal) => {
+    modal.addEventListener('click', (e) => {
+      const r = modal.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+        modal.close();
+      }
+    });
+  });
+</script>
 
 <style>
   .page {
@@ -62,7 +107,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #C9503A;
+    color: #F4611A;
     text-decoration: none;
     display: inline-block;
     margin-bottom: 2.5rem;
@@ -84,110 +129,225 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     margin: 0 0 3rem 0;
   }
 
+  /* ---- Cards ---- */
   .work-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .work-card {
+    position: relative;
     display: flex;
     align-items: stretch;
-    border: 1px solid rgba(28, 26, 23, 0.1);
-    border-radius: 12px;
+    height: 260px;
+    border-radius: 16px;
     overflow: hidden;
-    text-decoration: none;
-    background: #fff;
-    transition: border-color 0.18s, background 0.18s;
+    background: #111;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .work-card:hover { border-color: rgba(28, 26, 23, 0.2); background: #fafaf9; }
+  .work-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  }
 
-  .work-thumb {
-    width: 280px;
+  .card-cover-btn {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .card-ambient {
+    position: absolute;
+    inset: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(32px) brightness(0.55) saturate(1.4);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+
+  .card-img-wrap {
+    position: relative;
+    width: 45%;
     flex-shrink: 0;
-    background: #E8E4DD;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .work-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
-  .ph-label {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(28, 26, 23, 0.25);
+    z-index: 1;
+    -webkit-mask-image: linear-gradient(to right, black 55%, transparent 100%);
+    mask-image: linear-gradient(to right, black 55%, transparent 100%);
   }
 
-  .work-info {
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-img-ph {
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .card-glass {
+    position: relative;
+    z-index: 2;
     flex: 1;
-    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem 2rem 2rem 1.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .work-category {
+  .card-title {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.6rem;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
     font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #C9503A;
-    display: block;
-    margin-bottom: 0.4rem;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
   }
 
-  .work-title {
+  .card-sub {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1C1A17;
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
-  }
-
-  .work-desc {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 0.85rem;
-    color: rgba(28, 26, 23, 0.6);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
     margin: 0;
     line-height: 1.6;
+    max-width: 42ch;
   }
 
-  .work-links {
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 4;
+  }
+
+  .watch-btn {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    padding: 0.4rem 1rem;
+    text-decoration: none;
+    background: linear-gradient(to right, rgba(255,255,255,0.15) 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
+    transition: background-position 0.35s ease, border-color 0.35s ease;
+    align-self: flex-start;
+  }
+  .watch-btn:hover { background-position: 0% 0; border-color: rgba(255,255,255,0.8); }
+
+  .deep-btn {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #F4611A;
+    border: 1.5px solid #F4611A;
+    padding: 0.4rem 1rem;
+    text-decoration: none;
+    background: linear-gradient(to right, #F4611A 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
+    transition: background-position 0.35s ease, color 0.35s ease;
+    align-self: flex-start;
+  }
+  .deep-btn:hover { background-position: 0% 0; color: #fff; }
+
+  /* ---- Modal ---- */
+  .project-modal {
+    border: none;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 520px;
+    width: calc(100vw - 3rem);
+    background: #fff;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+  }
+
+  .project-modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-inner {
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(28, 26, 23, 0.35);
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: #1C1A17; }
+
+  .modal-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1C1A17;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    padding-right: 2rem;
+  }
+
+  .modal-body {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(28, 26, 23, 0.7);
+    line-height: 1.75;
+    margin: 0 0 1.75rem 0;
+  }
+
+  .modal-actions {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
   }
 
-  .btn-outline {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #C9503A;
-    border: 1.5px solid #C9503A;
-    border-radius: 0;
-    padding: 0.4rem 1rem;
-    text-decoration: none;
-    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+  /* Reuse .watch-btn in modal context — needs dark version */
+  .modal-actions .watch-btn {
+    color: #F4611A;
+    border-color: #F4611A;
+    background: linear-gradient(to right, #F4611A 50%, transparent 50%);
     background-size: 200%;
     background-position: 100% 0;
-    transition: background-position 0.35s ease, color 0.35s ease;
-    cursor: pointer;
   }
-  .btn-outline:hover {
-    background-position: 0% 0;
-    color: #fff;
-  }
+  .modal-actions .watch-btn:hover { background-position: 0% 0; color: #fff; border-color: #F4611A; }
 
+  /* ---- Responsive ---- */
   @media (max-width: 600px) {
-    .work-card { flex-direction: column; }
-    .work-thumb { width: 100%; aspect-ratio: 16/9; }
+    .work-card { height: auto; flex-direction: column; }
+    .card-img-wrap {
+      width: 100%;
+      height: 180px;
+      -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    }
+    .card-glass { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
   }
 </style>

@@ -90,39 +90,39 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
       <div class="work-list">
         {projects.map((project) => (
           <article class="work-card">
-            {/* Full-cover link for the card — avoids nested <a> invalid HTML */}
+            {/* Cover link — no nested <a> */}
             <a href={`/work/${project.id}`} class="card-cover-link" aria-label={project.data.title}></a>
 
-            <div class="work-thumb">
+            {/* Layer 1: blurred ambient background — bleeds image colors across whole card */}
+            {project.data.thumbnail && (
+              <div
+                class="card-ambient"
+                style={`background-image: url('${project.data.thumbnail}')`}
+              ></div>
+            )}
+
+            {/* Layer 2: sharp image, left side, fades right via mask */}
+            <div class="card-img-wrap">
               {project.data.thumbnail
-                ? <img src={project.data.thumbnail} alt={project.data.title} />
-                : <span class="ph-label">Image</span>
+                ? <img src={project.data.thumbnail} alt={project.data.title} class="card-img" />
+                : <div class="card-img-ph"></div>
               }
             </div>
 
-            <div class="work-info">
-              <div>
-                <h3 class="work-title">{project.data.title}</h3>
-                <p class="work-desc">{project.data.description}</p>
-              </div>
-              <div class="work-actions">
-                {project.data.watchLink && (
-                  <a
-                    href={project.data.watchLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="ext-icon"
-                    title="Watch"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      <polyline points="15 3 21 3 21 9"/>
-                      <line x1="10" y1="14" x2="21" y2="3"/>
-                    </svg>
-                  </a>
-                )}
-                <a href={`/work/${project.id}`} class="deep-dive-link">Deep Dive &rarr;</a>
-              </div>
+            {/* Layer 3: glass content panel */}
+            <div class="card-glass">
+              <h3 class="card-title">{project.data.title}</h3>
+              <p class="card-sub">{project.data.description}</p>
+              {project.data.watchLink && (
+                <a
+                  href={project.data.watchLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="watch-btn"
+                >
+                  Watch Now
+                </a>
+              )}
             </div>
           </article>
         ))}
@@ -290,7 +290,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   .tagline {
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.72rem;
-    color: #C9503A;
+    color: #F4611A;
     margin: 0 0 1.5rem 0;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -382,9 +382,9 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #C9503A;
-    border: 1.5px solid #C9503A;
-    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    color: #F4611A;
+    border: 1.5px solid #F4611A;
+    background: linear-gradient(to right, #F4611A 50%, transparent 50%);
     background-size: 200%;
     background-position: 100% 0;
     padding: 0.5rem 1.75rem;
@@ -435,13 +435,13 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.06em;
-    color: #C9503A;
-    border: 1.5px solid #C9503A;
+    color: #F4611A;
+    border: 1.5px solid #F4611A;
     border-radius: 0;
     padding: 0.4rem 1.1rem;
     text-decoration: none;
     white-space: nowrap;
-    background: linear-gradient(to right, #C9503A 50%, transparent 50%);
+    background: linear-gradient(to right, #F4611A 50%, transparent 50%);
     background-size: 200%;
     background-position: 100% 0;
     transition: background-position 0.35s ease, color 0.35s ease;
@@ -457,111 +457,145 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   .work-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .work-card {
+    position: relative;
     display: flex;
     align-items: stretch;
-    gap: 0;
-    border: 1px solid rgba(28, 26, 23, 0.1);
-    border-radius: 12px;
+    height: 260px;
+    border-radius: 16px;
     overflow: hidden;
-    position: relative;
-    transition: border-color 0.18s, background 0.18s;
-    background: #fff;
+    background: #111;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .work-card:hover {
-    border-color: rgba(28, 26, 23, 0.2);
-    background: #fafaf9;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   }
 
-  /* Full-cover invisible link — sits above card, below action links */
+  /* Cover link */
   .card-cover-link {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 3;
   }
 
-  /* Action links float above the cover link */
-  .work-actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  /* Layer 1: ambient blurred background */
+  .card-ambient {
+    position: absolute;
+    inset: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(32px) brightness(0.55) saturate(1.4);
+    transform: scale(1.1);
+    z-index: 0;
+  }
+
+  /* Layer 2: sharp image, left side */
+  .card-img-wrap {
     position: relative;
-    z-index: 2;
-  }
-
-  .deep-dive-link {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #C9503A;
-    text-decoration: none;
-    position: relative;
-    z-index: 2;
-    transition: opacity 0.15s;
-  }
-  .deep-dive-link:hover { opacity: 0.7; }
-
-  .work-thumb {
-    width: 260px;
+    width: 45%;
     flex-shrink: 0;
-    background: #E8E4DD;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    z-index: 1;
+    /* mask fades image into glass on the right */
+    -webkit-mask-image: linear-gradient(to right, black 55%, transparent 100%);
+    mask-image: linear-gradient(to right, black 55%, transparent 100%);
   }
-  .work-thumb img {
+
+  .card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
-  .ph-label {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(28, 26, 23, 0.25);
+  .card-img-ph {
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.05);
   }
 
-  .work-info {
+  /* Layer 3: glass content panel */
+  .card-glass {
+    position: relative;
+    z-index: 2;
     flex: 1;
-    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 1rem;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem 2rem 2rem 1.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .work-title {
+  .card-category {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 1.4rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    color: #1C1A17;
-    margin: 0 0 0.4rem 0;
-    line-height: 1.2;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #F4611A;
   }
 
-  .work-desc {
+  .card-title {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.825rem;
-    color: rgba(28, 26, 23, 0.6);
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .card-sub {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
     margin: 0;
     line-height: 1.6;
+    max-width: 42ch;
   }
 
-  .ext-icon {
-    color: rgba(28, 26, 23, 0.35);
-    transition: color 0.15s;
-    display: flex;
-    align-items: center;
+  .watch-btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    padding: 0.45rem 1.25rem;
+    text-decoration: none;
+    background: linear-gradient(to right, rgba(255,255,255,0.15) 50%, transparent 50%);
+    background-size: 200%;
+    background-position: 100% 0;
+    transition: background-position 0.35s ease, border-color 0.35s ease;
+    position: relative;
+    z-index: 4;
+    align-self: flex-start;
   }
-  .ext-icon:hover { color: #C9503A; }
+  .watch-btn:hover {
+    background-position: 0% 0;
+    border-color: rgba(255,255,255,0.8);
+  }
+
+  @media (max-width: 600px) {
+    .work-card { height: auto; flex-direction: column; }
+    .card-img-wrap {
+      width: 100%;
+      height: 180px;
+      -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    }
+    .card-glass { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
+  }
 
   /* ---- Writing ---- */
   .writing-list {

@@ -9,6 +9,7 @@ const work = defineCollection({
     description: z.string(),
     thumbnail: z.string().optional(),
     watchLink: z.string().optional(),
+    longDescription: z.string().optional(),
     order: z.number().default(0),
   }),
 });
