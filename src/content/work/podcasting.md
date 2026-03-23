@@ -5,6 +5,13 @@ description: "Started with copywriting in 2022, levelled up on demand, and ended
 thumbnail: "/images/work/podcastprod.png"
 longDescription: "Podcasts and content creation is how I first stepped into video. Started with copywriting, moved into graphic design, editing, motion graphics, and then production. No course, no roadmap. Just brands, gigs, and levelling up with every project. Worked primarily with real estate brands thinking about 2030 and beyond."
 tools: ["Nano Banana Pro", "Adobe Premiere Pro", "Claude", "After Effects", "Procreate", "Figma"]
+btsImages:
+  - "/images/bts/podcasting/IMG_7070.PNG"
+  - "/images/bts/podcasting/IMG_7071.jpg"
+  - "/images/bts/podcasting/kOTpUyZR4OE-HD.jpg"
+  - "/images/bts/podcasting/maxresdefault.jpg"
+  - "/images/bts/podcasting/qK1Hs-2p0Bk-HD.jpg"
+  - "/images/bts/podcasting/bts-pod.jpg"
 order: 3
 ---
 

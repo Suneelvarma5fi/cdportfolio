@@ -173,7 +173,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
           { label: 'Hosted N8N Japan Hackathon', sub: 'Yokohama, 2025', img: '/images/events/JPNHCKTN.jpg' },
           { label: 'LeetCode Top 10%', sub: 'Globally', img: '/images/events/leetcode.jpg' },
           { label: 'I Stream', sub: 'Tech, Creativity & Films', img: '/images/events/livestream.jpg' },
-          { label: 'IRL-maxxing', sub: '', img: '/images/events/events.JPG' },
+          { label: 'IRL-maxxing', sub: '2025, 2026', img: '/images/events/events.JPG' },
         ].map((card) => (
           <div class="photo-card">
             <div class="photo-img">
@@ -195,19 +195,32 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
          SAY HI / FOOTER
     ====================================================== -->
     <section class="section">
-      <h2 class="section-title" style="margin-bottom:1.5rem;">Say hi!</h2>
-
       <div class="contact-box">
         <p class="contact-msg">
-          Whether you're a brand looking for creative direction, a founder with a
-          story worth telling, or you just want to talk — I'm genuinely happy to
-          hear from you.
+          Hey YOU!
         </p>
-        <ul class="contact-list">
-          <li>&bull; <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="contact-link">Twitter / X DMs</a> are open (I actually check them)</li>
-          <li>&bull; <a href="mailto:suneel@example.com" class="contact-link">Drop me an email</a> if you've got something longer to say</li>
-        </ul>
-        <p class="contact-sign">See you around!</p>
+        <p class="contact-msg">
+          I'm SUNEEL VARMA. I'm a polymath, I write code, I do graphic design, I do copywriting, I edit videos, I write film scripts &amp; I love to produce them myself.
+        </p>
+        <p class="contact-msg">
+          I fell in love with filmmaking very early on, it took some time to figure out life, finances and what I care about. I produce videos/films myself, I aim to make films that bring my ideas and thoughts to reality. I believe in individualism, anyone can achieve anything they want to. I don't like to say I can't do it. If I'm not doing it, it's not interesting to me, that's all.
+        </p>
+        <p class="contact-msg">
+          I read and survived books like The Fountainhead, Atlas Shrugged, and other work by Ayn Rand and Dostoyevsky's Crime and Punishment. I read a lot of technical stuff and watch films whenever I have some time to kill. I'd love to chat about them any day.
+        </p>
+        <p class="contact-msg"><strong>Just Say Hi!</strong></p>
+
+        <div class="social-links">
+          <a href="https://www.instagram.com/thesuneelvarma" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.x.com/thesuneelvarma" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.836L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.youtube.com/thesuneelvarma" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -813,6 +826,20 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     background-position: 0 0;
     color: #1C1A17;
   }
+
+  .social-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .social-link {
+    color: rgba(28, 26, 23, 0.45);
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+  }
+  .social-link:hover { color: #1C1A17; }
 
   .contact-sign {
     font-family: 'Noto Sans', sans-serif;
