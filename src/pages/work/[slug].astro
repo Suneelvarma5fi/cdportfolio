@@ -13,6 +13,27 @@ if (!entry) {
 }
 
 const { Content } = await render(entry);
+
+const btsPositions = [
+  { top: '8%',  left: '2%',  rot: '-4deg' },
+  { top: '5%',  left: '32%', rot: '3deg'  },
+  { top: '10%', left: '58%', rot: '-2deg' },
+  { top: '38%', left: '8%',  rot: '5deg'  },
+  { top: '42%', left: '38%', rot: '-3deg' },
+  { top: '40%', left: '62%', rot: '2deg'  },
+  { top: '68%', left: '18%', rot: '-5deg' },
+  { top: '65%', left: '50%', rot: '4deg'  },
+];
+
+const toolLogoMap: Record<string, string> = {
+  'Kling 3.0': '/images/logos/kling3.png',
+  'Nano Banana Pro': '/images/logos/nbpro.png',
+  'Adobe Premiere Pro': '/images/logos/premiere-pro-logo.png',
+  'Claude': '/images/logos/claude-logo.webp',
+  'After Effects': '/images/logos/aftereffects.png',
+  'Procreate': '/images/logos/procreate.png',
+  'Figma': '/images/logos/figma.png',
+};
 ---
 
 <Layout title={`${entry.data.title} — Suneel Armstrong`} description={entry.data.description}>
@@ -27,20 +48,20 @@ const { Content } = await render(entry);
       &larr; Back to work
     </a>
 
+    <!-- Title -->
+    <h1 style="font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 600; line-height: 1.05; color: #1C1A17; margin: 0 0 0.75rem 0;">
+      {entry.data.title}
+    </h1>
+
     <!-- Category tag -->
-    <div style="margin-bottom: 1rem;">
+    <div style="margin-bottom: 1.5rem;">
       <span style="font-family: 'Noto Sans', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #F4611A; background-color: rgba(193, 123, 58, 0.1); padding: 0.25rem 0.75rem; border-radius: 2px;">
         {entry.data.category}
       </span>
     </div>
 
-    <!-- Title -->
-    <h1 style="font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 600; line-height: 1.05; color: #1C1A17; margin: 0 0 1.5rem 0;">
-      {entry.data.title}
-    </h1>
-
     <!-- Description -->
-    <p style="font-family: 'Noto Sans', sans-serif; font-size: 1rem; color: rgba(28,26,23,0.65); margin: 0 0 3rem 0; line-height: 1.7; max-width: 42rem;">
+    <p style="font-family: 'Noto Sans', sans-serif; font-size: 1rem; color: rgba(28,26,23,0.65); margin: 0 0 3rem 0; line-height: 1.7;">
       {entry.data.description}
     </p>
 
@@ -68,14 +89,68 @@ const { Content } = await render(entry);
       <Content />
     </div>
 
+    <!-- Behind the Scenes -->
+    {entry.data.btsImages && entry.data.btsImages.length > 0 && (
+      <div class="bts-section">
+        <h2 class="tools-heading">Behind the Scenes</h2>
+        <div class="bts-stack" id="bts-stack">
+          {entry.data.btsImages.slice(0, 8).map((src, i) => {
+            const pos = btsPositions[i % btsPositions.length];
+            return (
+              <div class="bts-card" data-index={i} style={`--rot: ${pos.rot}; --nudge-x: ${[-8,12,-5,10,-12,6,-9,14][i]}px; --nudge-y: ${[6,-10,8,-6,10,-8,5,-12][i]}px;`}>
+                <img src={src} alt={`Behind the scenes ${i + 1}`} class="bts-img" />
+              </div>
+            );
+          })}
+        </div>
+        <p class="bts-hint">click any photo to bring it forward</p>
+      </div>
+    )}
+
+    <!-- Tools used -->
+    {entry.data.tools && entry.data.tools.length > 0 && (
+      <div class="tools-section">
+        <h2 class="tools-heading">Tools used</h2>
+        <div class="tools-grid">
+          {entry.data.tools.map((tool) => {
+            const logo = toolLogoMap[tool];
+            return (
+              <div class="tool-chip" title={tool}>
+                {logo
+                  ? <img src={logo} alt={tool} class="tool-logo-img" />
+                  : <span class="tool-logo-fallback">{tool.charAt(0)}</span>
+                }
+                <span class="tool-tooltip">{tool}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    )}
+
   </div>
+
+<script>
+  const stack = document.getElementById('bts-stack');
+  if (stack) {
+    let topZ = 9;
+    stack.querySelectorAll<HTMLElement>('.bts-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        stack.querySelectorAll('.bts-card').forEach((c) => c.classList.remove('on-top'));
+        topZ++;
+        card.style.zIndex = String(topZ);
+        card.classList.add('on-top');
+      });
+    });
+  }
+</script>
 
 </Layout>
 
 <style>
   /* Prose styling for markdown content */
   .prose-content {
-    max-width: 42rem;
+    max-width: 100%;
     font-family: 'Noto Sans', sans-serif;
     color: #1C1A17;
     line-height: 1.8;
@@ -133,5 +208,153 @@ const { Content } = await render(entry);
     font-style: italic;
     font-family: 'Black Han Sans', sans-serif;
     font-size: 1.1rem;
+  }
+
+  /* Behind the Scenes */
+  .bts-section {
+    max-width: 100%;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(28, 26, 23, 0.08);
+  }
+
+  .bts-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .bts-card {
+    max-width: 280px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    outline: 10px solid #fff;
+    transform: rotate(var(--rot)) translate(var(--nudge-x), var(--nudge-y));
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .bts-card:hover {
+    box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+  }
+  .bts-card.on-top {
+    transform: rotate(0deg) translate(0, 0) scale(1.04);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+
+  .bts-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none;
+  }
+
+  .bts-hint {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(28, 26, 23, 0.35);
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* Tools */
+  .tools-section {
+    max-width: 42rem;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(28, 26, 23, 0.08);
+  }
+
+  .tools-heading {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(28, 26, 23, 0.4);
+    margin: 0 0 1.25rem 0;
+  }
+
+  .tools-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+  .tools-grid::-webkit-scrollbar { display: none; }
+
+  .tool-chip {
+    position: relative;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08));
+    transition: filter 0.15s;
+  }
+  .tool-chip:hover {
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.14));
+  }
+
+  .tool-logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  .tool-logo-fallback {
+    width: 32px;
+    height: 32px;
+    background: rgba(28, 26, 23, 0.08);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(28, 26, 23, 0.5);
+  }
+
+  .tool-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1C1A17;
+    color: #fff;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .tool-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #1C1A17;
+  }
+  .tool-chip:hover .tool-tooltip {
+    opacity: 1;
   }
 </style>

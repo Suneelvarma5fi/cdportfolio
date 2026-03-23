@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const articles = [
+  { title: 'How Claude helped my AI Ad Film. Reality | Step by Step', date: '18 Feb 2026', url: 'https://x.com/thesuneelvarma/status/2021800123773391199?s=20' },
+  { title: "Your Best Ideas Won't Go Viral as a New Creator, WHY??", date: '18 Jan 2026', url: 'https://x.com/thesuneelvarma/status/2012600451255148938?s=20' },
+  { title: 'Sense of humor & Pizza', date: '15 Jan 2026', url: 'https://x.com/thesuneelvarma/status/2011714107423277183?s=20' },
+];
+---
+
+<Layout title="Writing — Suneel Armstrong">
+  <main class="page">
+
+    <a href="/" class="back-link">&larr; Back</a>
+
+    <h1 class="page-title">Writing</h1>
+    <p class="page-sub">Notes on creativity, technology, and making things.</p>
+
+    <div class="writing-list">
+      {articles.map((a) => (
+        <a href={a.url} target="_blank" rel="noopener noreferrer" class="article-row">
+          <span class="article-title">{a.title}</span>
+          <span class="article-date">{a.date}</span>
+        </a>
+      ))}
+    </div>
+
+  </main>
+</Layout>
+
+<style>
+  .page {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .back-link {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #F4611A;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    transition: opacity 0.15s;
+  }
+  .back-link:hover { opacity: 0.7; }
+
+  .page-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #1C1A17;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .page-sub {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(28, 26, 23, 0.55);
+    margin: 0 0 3rem 0;
+  }
+
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .article-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(28, 26, 23, 0.06);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .article-row:first-child { border-top: 1px solid rgba(28, 26, 23, 0.06); }
+
+  .article-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1C1A17;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .article-row:hover .article-title { color: #4A6FAD; text-decoration: underline; text-underline-offset: 3px; }
+
+  .article-date {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(28, 26, 23, 0.4);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+</style>

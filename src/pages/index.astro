@@ -19,25 +19,25 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
         <p class="tagline">Creative Director &amp; Technologist</p>
 
         <p class="hero-intro">
-          Placeholder description. Suneel to provide a one or two sentence
-          summary about who he is and what he does.
+          I make films and tell stories. Someone who is creative, great at AI & technology and cares about the craft.
         </p>
 
         <div class="quests-block">
-          <h2 class="quests-heading">Main quests</h2>
+          <h2 class="quests-heading">Right now</h2>
           <ul class="quest-list">
-            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
-            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
-            <li>&rarr; Placeholder main quest. Suneel to provide.</li>
+            <li>&rarr; Making story-centered Ad-Films and Films, that doesn't smell like AI.</li>
+            <li>&rarr; Launched a kick-ass tool for creators who struggle to <a href="https://be-articulate.xyz/" target="_blank" rel="noopener noreferrer" class="highlight-link">articulate</a>.</li>
+            <li>&rarr; Building efficient workflows and systems to make the creative process repeatable and useful for myself and the team I work with.</li>
+            <li>&rarr; Collecting aura points.</li>
           </ul>
         </div>
 
         <div class="quests-block">
-          <h2 class="quests-heading">Side and past quests</h2>
+          <h2 class="quests-heading">In the past</h2>
           <ul class="quest-list">
-            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
-            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
-            <li>&rarr; Placeholder past quest. Suneel to provide.</li>
+            <li>&rarr; Produced podcasts and content for real estate brands.</li>
+            <li>&rarr; Built enterprise applications and automations for BOSCH.</li>
+            <li>&rarr; Hosted hackathons in India, Japan.</li>
           </ul>
         </div>
       </div>
@@ -82,10 +82,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
          FEATURED WORK
     ====================================================== -->
     <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">Featured Work</h2>
-        <a href="/work" class="pill-outline">see all &rarr;</a>
-      </div>
+      <h2 class="section-title" style="margin-bottom: 1.75rem;">Featured Work</h2>
 
       <div class="work-list">
         {projects.map((project) => (
@@ -127,6 +124,10 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
           </article>
         ))}
       </div>
+
+      <div style="margin-top: 1.25rem; text-align: center;">
+        <a href="/work" class="pill-outline">see more &rarr;</a>
+      </div>
     </section>
 
     <!-- ======================================================
@@ -138,14 +139,13 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
           <h2 class="section-title">I write</h2>
           <p class="section-sub">Notes on creativity, technology, and making things.</p>
         </div>
-        <a href="#" class="pill-outline">read more &rarr;</a>
       </div>
 
       <div class="writing-list">
         {[
-          { title: 'Why Creative Directors Should Learn to Code', date: '03 Jan 2025', url: '#' },
-          { title: 'The Death of the Mood Board', date: '04 Nov 2024', url: '#' },
-          { title: 'What Hackathons Taught Me About Storytelling', date: '01 Sep 2024', url: '#' },
+          { title: 'How Claude helped my AI Ad Film. Reality | Step by Step', date: '18 Feb 2026', url: 'https://x.com/thesuneelvarma/status/2021800123773391199?s=20' },
+          { title: 'Your Best Ideas Won\'t Go Viral as a New Creator, WHY??', date: '18 Jan 2026', url: 'https://x.com/thesuneelvarma/status/2012600451255148938?s=20' },
+          { title: 'Sense of humor & Pizza', date: '15 Jan 2026', url: 'https://x.com/thesuneelvarma/status/2011714107423277183?s=20' },
         ].map((a) => (
           <a href={a.url} target="_blank" rel="noopener noreferrer" class="article-row">
             <span class="article-title">{a.title}</span>
@@ -155,7 +155,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
       </div>
 
       <div class="show-more">
-        <a href="#" class="muted-link">show all posts &darr;</a>
+        <a href="/writing" class="muted-link">show all posts &darr;</a>
       </div>
     </section>
 
@@ -163,23 +163,24 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
          PROUD SIDE QUESTS
     ====================================================== -->
     <section class="section">
-      <h2 class="section-title" style="margin-bottom:0.5rem;">Proud Side Quests</h2>
+      <h2 class="section-title" style="margin-bottom:0.5rem;">Side Projects</h2>
       <p class="section-sub" style="margin-bottom:1.5rem;">
-        Things I built, won, or showed up to that I'm quietly proud of.
+        Things I built, won, or showed up.
       </p>
 
       <div class="photo-scroll">
         {[
-          { label: 'N8N Japan Hackathon', sub: 'Tokyo, 2024' },
-          { label: 'LeetCode Top 10%', sub: 'Globally' },
-          { label: 'Events I\'ve Hosted', sub: '200+ people' },
-          { label: 'N8N Japan Hackathon', sub: 'Tokyo, 2024' },
-          { label: 'LeetCode Top 10%', sub: 'Globally' },
-          { label: 'Events I\'ve Hosted', sub: '200+ people' },
+          { label: 'Hosted N8N Japan Hackathon', sub: 'Yokohama, 2025', img: '/images/events/JPNHCKTN.jpg' },
+          { label: 'LeetCode Top 10%', sub: 'Globally', img: '/images/events/leetcode.jpg' },
+          { label: 'I Stream', sub: 'Tech, Creativity & Films', img: '/images/events/livestream.jpg' },
+          { label: 'IRL-maxxing', sub: '', img: '/images/events/events.JPG' },
         ].map((card) => (
           <div class="photo-card">
             <div class="photo-img">
-              <span class="ph-label" style="color:rgba(255,255,255,0.4);">Photo</span>
+              {card.img
+                ? <img src={card.img} alt={card.label} style={`width:100%;height:100%;object-fit:cover;display:block;${card.flip ? 'transform:scaleX(-1);' : ''}`} />
+                : <span class="ph-label" style="color:rgba(255,255,255,0.4);">Photo</span>
+              }
             </div>
             <div class="photo-caption">
               <span class="photo-label">{card.label}</span>
@@ -226,6 +227,58 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
       if (heroImg) heroImg.style.opacity = '0';
       loopVid.style.opacity = '1';
     }, { once: true });
+  }
+
+  // Auto-scroll photo strip
+  const photoScroll = document.querySelector<HTMLElement>('.photo-scroll');
+  if (photoScroll) {
+    let paused = false;
+    let pos = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragScrollLeft = 0;
+
+    const tick = () => {
+      if (!paused) {
+        pos += 0.12;
+        if (pos >= photoScroll.scrollWidth - photoScroll.clientWidth) {
+          pos = 0;
+        }
+        photoScroll.scrollLeft = pos;
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    photoScroll.addEventListener('mouseenter', () => {
+      paused = true;
+      photoScroll.style.cursor = 'grab';
+    });
+    photoScroll.addEventListener('mouseleave', () => {
+      paused = false;
+      isDragging = false;
+      photoScroll.style.cursor = 'default';
+      pos = photoScroll.scrollLeft;
+    });
+    photoScroll.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      dragStartX = e.pageX - photoScroll.offsetLeft;
+      dragScrollLeft = photoScroll.scrollLeft;
+      photoScroll.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        pos = photoScroll.scrollLeft;
+        photoScroll.style.cursor = 'grab';
+      }
+    });
+    photoScroll.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - photoScroll.offsetLeft;
+      photoScroll.scrollLeft = dragScrollLeft - (x - dragStartX);
+    });
   }
 
   if (btn && loopVid && backflipVid) {
@@ -289,7 +342,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
 
   .tagline {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.91rem;
     color: #F4611A;
     margin: 0 0 1.5rem 0;
     letter-spacing: 0.08em;
@@ -311,7 +364,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
 
   .quests-heading {
     font-family: 'Noto Sans', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #1C1A17;
     margin: 0 0 0.6rem 0;
@@ -656,6 +709,8 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     padding-bottom: 0.5rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   }
   .photo-scroll::-webkit-scrollbar { display: none; }
 
@@ -682,8 +737,8 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 2rem 0.875rem 0.875rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+    padding: 4rem 0.875rem 0.875rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.1) 100%);
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
@@ -742,6 +797,22 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     transition: opacity 0.15s;
   }
   .contact-link:hover { opacity: 0.7; }
+
+  .highlight-link {
+    color: inherit;
+    text-decoration: none;
+    background: linear-gradient(rgba(255, 220, 0, 0.9), rgba(255, 220, 0, 0.9));
+    background-size: 100% 35%;
+    background-position: 0 95%;
+    background-repeat: no-repeat;
+    transition: background-size 0.25s ease, background-position 0.25s ease;
+    padding: 0 1px;
+  }
+  .highlight-link:hover {
+    background-size: 100% 100%;
+    background-position: 0 0;
+    color: #1C1A17;
+  }
 
   .contact-sign {
     font-family: 'Noto Sans', sans-serif;

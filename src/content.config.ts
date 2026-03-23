@@ -10,6 +10,8 @@ const work = defineCollection({
     thumbnail: z.string().optional(),
     watchLink: z.string().optional(),
     longDescription: z.string().optional(),
+    tools: z.array(z.string()).optional(),
+    btsImages: z.array(z.string()).optional(),
     order: z.number().default(0),
   }),
 });
