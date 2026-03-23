@@ -242,56 +242,51 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     }, { once: true });
   }
 
-  // Auto-scroll photo strip
+  // Infinite auto-scroll photo strip
   const photoScroll = document.querySelector<HTMLElement>('.photo-scroll');
   if (photoScroll) {
+    // Duplicate tiles for infinite loop
+    const origItems = Array.from(photoScroll.children);
+    origItems.forEach((item) => {
+      const clone = item.cloneNode(true) as HTMLElement;
+      clone.setAttribute('aria-hidden', 'true');
+      photoScroll.appendChild(clone);
+    });
+
+    const halfWidth = photoScroll.scrollWidth / 2;
     let paused = false;
     let pos = 0;
     let isDragging = false;
     let dragStartX = 0;
     let dragScrollLeft = 0;
+    let touchStartX = 0;
+    let touchScrollLeft = 0;
 
     const tick = () => {
       if (!paused) {
         pos += 0.12;
-        if (pos >= photoScroll.scrollWidth - photoScroll.clientWidth) {
-          pos = 0;
-        }
+        if (pos >= halfWidth) pos -= halfWidth;
         photoScroll.scrollLeft = pos;
       }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
 
-    photoScroll.addEventListener('mouseenter', () => {
-      paused = true;
-      photoScroll.style.cursor = 'grab';
-    });
-    photoScroll.addEventListener('mouseleave', () => {
-      paused = false;
-      isDragging = false;
-      photoScroll.style.cursor = 'default';
-      pos = photoScroll.scrollLeft;
-    });
-    photoScroll.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      dragStartX = e.pageX - photoScroll.offsetLeft;
-      dragScrollLeft = photoScroll.scrollLeft;
-      photoScroll.style.cursor = 'grabbing';
-    });
-    window.addEventListener('mouseup', () => {
-      if (isDragging) {
-        isDragging = false;
-        pos = photoScroll.scrollLeft;
-        photoScroll.style.cursor = 'grab';
-      }
-    });
+    // Mouse events
+    photoScroll.addEventListener('mouseenter', () => { paused = true; photoScroll.style.cursor = 'grab'; });
+    photoScroll.addEventListener('mouseleave', () => { paused = false; isDragging = false; photoScroll.style.cursor = 'default'; pos = photoScroll.scrollLeft % halfWidth; });
+    photoScroll.addEventListener('mousedown', (e) => { isDragging = true; dragStartX = e.pageX; dragScrollLeft = photoScroll.scrollLeft; photoScroll.style.cursor = 'grabbing'; });
+    window.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; pos = photoScroll.scrollLeft % halfWidth; photoScroll.style.cursor = 'grab'; } });
     photoScroll.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
       e.preventDefault();
-      const x = e.pageX - photoScroll.offsetLeft;
-      photoScroll.scrollLeft = dragScrollLeft - (x - dragStartX);
+      photoScroll.scrollLeft = dragScrollLeft - (e.pageX - dragStartX);
     });
+
+    // Touch events for mobile
+    photoScroll.addEventListener('touchstart', (e) => { paused = true; touchStartX = e.touches[0].pageX; touchScrollLeft = photoScroll.scrollLeft; }, { passive: true });
+    photoScroll.addEventListener('touchmove', (e) => { photoScroll.scrollLeft = touchScrollLeft - (e.touches[0].pageX - touchStartX); }, { passive: true });
+    photoScroll.addEventListener('touchend', () => { paused = false; pos = photoScroll.scrollLeft % halfWidth; });
   }
 
   if (btn && loopVid && backflipVid) {
