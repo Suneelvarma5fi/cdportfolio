@@ -1,7 +1,7 @@
 ---
 title: "Leave Elara Alone"
 category: "Short Film"
-description: "A story of a daughter and a father from the future. Written, generated and edited in 8 hours. Screened end of March 2026."
+description: "A beautiful story I wrote in an 8 hour hackathon, which won the crowd and is now in-production. The whole crew for this film is just 1 person."
 thumbnail: "/images/work/titlefinalised.png"
 watchLink: "https://youtu.be/wMu6oyg65Ec"
 longDescription: "When a film contest started, I wrote a beautiful story of a daughter and father from the future. I fell in love with the script and the characters. The full film is 5-6 minutes long, but the contest limit was 2 minutes. I didn't shrink it just to win. I submitted with a quirky ending, it worked, and the jury put it at Top 4. The crowd loved it. I am finishing the full film now."
