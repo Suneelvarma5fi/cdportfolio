@@ -170,26 +170,28 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
         Things I built, won, or showed up.
       </p>
 
-      <div class="photo-scroll">
-        {[
-          { label: 'Hosted N8N Japan Hackathon', sub: 'Yokohama, 2025', img: '/images/events/JPNHCKTN.jpg' },
-          { label: 'LeetCode Top 10%', sub: 'Globally', img: '/images/events/leetcode.jpg' },
-          { label: 'I Stream', sub: 'Tech, Creativity & Films', img: '/images/events/livestream.jpg' },
-          { label: 'IRL-maxxing', sub: '2025, 2026', img: '/images/events/events.JPG' },
-        ].map((card) => (
-          <div class="photo-card">
-            <div class="photo-img">
-              {card.img
-                ? <img src={card.img} alt={card.label} style={`width:100%;height:100%;object-fit:cover;display:block;${card.flip ? 'transform:scaleX(-1);' : ''}`} />
-                : <span class="ph-label" style="color:rgba(255,255,255,0.4);">Photo</span>
-              }
+      <div class="photo-scroll-wrap">
+        <div class="photo-track" id="photo-track">
+          {[
+            { label: 'Hosted N8N Japan Hackathon', sub: 'Yokohama, 2025', img: '/images/events/JPNHCKTN.jpg' },
+            { label: 'LeetCode Top 10%', sub: 'Globally', img: '/images/events/leetcode.jpg' },
+            { label: 'I Stream', sub: 'Tech, Creativity & Films', img: '/images/events/livestream.jpg' },
+            { label: 'IRL-maxxing', sub: '2025, 2026', img: '/images/events/events.JPG' },
+          ].map((card) => (
+            <div class="photo-card">
+              <div class="photo-img">
+                {card.img
+                  ? <img src={card.img} alt={card.label} style="width:100%;height:100%;object-fit:cover;display:block;" />
+                  : <span class="ph-label" style="color:rgba(255,255,255,0.4);">Photo</span>
+                }
+              </div>
+              <div class="photo-caption">
+                <span class="photo-label">{card.label}</span>
+                <span class="photo-sub">{card.sub}</span>
+              </div>
             </div>
-            <div class="photo-caption">
-              <span class="photo-label">{card.label}</span>
-              <span class="photo-sub">{card.sub}</span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
 
@@ -245,51 +247,68 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
     }, { once: true });
   }
 
-  // Infinite auto-scroll photo strip
-  const photoScroll = document.querySelector<HTMLElement>('.photo-scroll');
-  if (photoScroll) {
-    // Duplicate tiles for infinite loop
-    const origItems = Array.from(photoScroll.children);
+  // Infinite auto-scroll photo strip (GPU-accelerated via transform)
+  const track = document.getElementById('photo-track') as HTMLElement | null;
+  if (track) {
+    // Clone all tiles for seamless loop
+    const origItems = Array.from(track.children);
     origItems.forEach((item) => {
       const clone = item.cloneNode(true) as HTMLElement;
       clone.setAttribute('aria-hidden', 'true');
-      photoScroll.appendChild(clone);
+      track.appendChild(clone);
     });
 
-    const halfWidth = photoScroll.scrollWidth / 2;
-    let paused = false;
-    let pos = 0;
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragScrollLeft = 0;
-    let touchStartX = 0;
-    let touchScrollLeft = 0;
+    // Wait one frame for layout so scrollWidth is accurate
+    requestAnimationFrame(() => {
+      const halfWidth = track.scrollWidth / 2;
+      let pos = 0;
+      let paused = false;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartPos = 0;
+      let touchStartX = 0;
+      let touchStartPos = 0;
 
-    const tick = () => {
-      if (!paused) {
-        pos += 0.12;
-        if (pos >= halfWidth) pos -= halfWidth;
-        photoScroll.scrollLeft = pos;
-      }
+      const tick = () => {
+        if (!paused) {
+          pos += 0.4;
+          if (pos >= halfWidth) pos -= halfWidth;
+          track.style.transform = `translateX(${-pos}px)`;
+        }
+        requestAnimationFrame(tick);
+      };
       requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
 
-    // Mouse events
-    photoScroll.addEventListener('mouseenter', () => { paused = true; photoScroll.style.cursor = 'grab'; });
-    photoScroll.addEventListener('mouseleave', () => { paused = false; isDragging = false; photoScroll.style.cursor = 'default'; pos = photoScroll.scrollLeft % halfWidth; });
-    photoScroll.addEventListener('mousedown', (e) => { isDragging = true; dragStartX = e.pageX; dragScrollLeft = photoScroll.scrollLeft; photoScroll.style.cursor = 'grabbing'; });
-    window.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; pos = photoScroll.scrollLeft % halfWidth; photoScroll.style.cursor = 'grab'; } });
-    photoScroll.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      photoScroll.scrollLeft = dragScrollLeft - (e.pageX - dragStartX);
+      const wrap = track.parentElement!;
+
+      wrap.addEventListener('mouseenter', () => { paused = true; wrap.style.cursor = 'grab'; });
+      wrap.addEventListener('mouseleave', () => { paused = false; isDragging = false; wrap.style.cursor = ''; });
+      wrap.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragStartX = e.pageX;
+        dragStartPos = pos;
+        wrap.style.cursor = 'grabbing';
+      });
+      window.addEventListener('mouseup', () => {
+        if (isDragging) { isDragging = false; wrap.style.cursor = 'grab'; }
+      });
+      wrap.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        pos = (dragStartPos - (e.pageX - dragStartX) + halfWidth * 10) % halfWidth;
+        track.style.transform = `translateX(${-pos}px)`;
+      });
+
+      wrap.addEventListener('touchstart', (e) => {
+        paused = true;
+        touchStartX = e.touches[0].pageX;
+        touchStartPos = pos;
+      }, { passive: true });
+      wrap.addEventListener('touchmove', (e) => {
+        pos = (touchStartPos - (e.touches[0].pageX - touchStartX) + halfWidth * 10) % halfWidth;
+        track.style.transform = `translateX(${-pos}px)`;
+      }, { passive: true });
+      wrap.addEventListener('touchend', () => { paused = false; });
     });
-
-    // Touch events for mobile
-    photoScroll.addEventListener('touchstart', (e) => { paused = true; touchStartX = e.touches[0].pageX; touchScrollLeft = photoScroll.scrollLeft; }, { passive: true });
-    photoScroll.addEventListener('touchmove', (e) => { photoScroll.scrollLeft = touchScrollLeft - (e.touches[0].pageX - touchStartX); }, { passive: true });
-    photoScroll.addEventListener('touchend', () => { paused = false; pos = photoScroll.scrollLeft % halfWidth; });
   }
 
   if (btn && loopVid && backflipVid) {
@@ -716,17 +735,21 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   .muted-link:hover { color: #1C1A17; }
 
   /* ---- Photo scroll ---- */
-  .photo-scroll {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
+  .photo-scroll-wrap {
+    overflow: hidden;
     padding-bottom: 0.5rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    cursor: grab;
+    user-select: none;
   }
-  .photo-scroll::-webkit-scrollbar { display: none; }
+
+  .photo-track {
+    display: flex;
+    gap: 0.75rem;
+    width: max-content;
+    will-change: transform;
+  }
 
   .photo-card {
     flex-shrink: 0;

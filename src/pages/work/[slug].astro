@@ -43,9 +43,10 @@ const toolLogoMap: Record<string, string> = {
     <!-- Back link -->
     <a
       href="/"
+      onclick="event.preventDefault(); history.length > 1 ? history.back() : window.location.href='/'"
       style="font-family: 'Noto Sans', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #F4611A; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 3rem;"
     >
-      &larr; Back to work
+      &larr; Back
     </a>
 
     <!-- Title -->

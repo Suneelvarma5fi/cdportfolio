@@ -9,7 +9,7 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
 <Layout title="Work — Suneel Armstrong">
   <main class="page">
 
-    <a href="/" class="back-link">&larr; Back</a>
+    <a href="/" class="back-link" onclick="event.preventDefault(); history.length > 1 ? history.back() : window.location.href='/'">&larr; Back</a>
 
     <h1 class="page-title">Work</h1>
     <p class="page-sub">A selection of projects across creative direction, film, and technology.</p>
