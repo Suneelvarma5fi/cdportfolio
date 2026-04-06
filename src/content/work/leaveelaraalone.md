@@ -32,4 +32,4 @@ This whole film, the part submitted for the contest, was done within 8 hours. Fr
 
 ## Result
 
-Won the contest. Won the crowd. The storyline connected with everyone in the room. I am now working on this film full time, planned to screen end of March 2026.
+Won the contest. Won the crowd. The storyline connected with everyone in the room. I am now working on this film full time, planned to screen soon.
