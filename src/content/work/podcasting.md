@@ -12,7 +12,7 @@ btsImages:
   - "/images/bts/podcasting/maxresdefault.jpg"
   - "/images/bts/podcasting/qK1Hs-2p0Bk-HD.jpg"
   - "/images/bts/podcasting/bts-pod.jpg"
-order: 3
+order: 4
 ---
 
 Podcasts and content creation is how I started exploring the video space since 2022. I learnt copywriting to begin with, then graphic design. There's no course or anything. I started reaching out to brands, doing small gigs, and that's how I learnt on a demand basis, levelling up the skill from each project.
