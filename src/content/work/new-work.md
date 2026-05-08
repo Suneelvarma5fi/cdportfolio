@@ -8,15 +8,3 @@ longDescription: "An ad made for Li.Fi Protocol centered on stablecoins. The goa
 tools: ["Adobe Premiere Pro", "After Effects", "Claude", "Procreate"]
 order: 3
 ---
-
-## Overview
-
-This ad was created for Li.Fi Protocol with a clear focus on stablecoins and practical messaging for a Web3 audience.
-
-## Process
-
-The production process combined scripting, visual development, edit structure, and motion polishing to keep the message simple and high-retention.
-
-## Result
-
-Published as a completed ad film. The final output is live via the watch link.
