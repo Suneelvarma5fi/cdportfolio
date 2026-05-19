@@ -225,7 +225,10 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           </a>
         </div>
-        <a href="https://calendly.com/suneelvarma55/articulate-enterprise" target="_blank" rel="noopener noreferrer" class="book-call-link">Book a call</a>
+        <a href="https://cal.com/suneel-armstrong-bx6uvj/30min" target="_blank" rel="noopener noreferrer" class="book-call-link">
+          Book a call
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
       </div>
     </section>
 
@@ -866,17 +869,25 @@ const projects = allWork.sort((a, b) => a.data.order - b.data.order);
   .social-link:hover { color: #1C1A17; }
 
   .book-call-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
     margin-top: 1.25rem;
+    padding: 0.5rem 1rem;
     font-family: 'Noto Sans', sans-serif;
     font-size: 0.875rem;
-    color: #4A6FAD;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1.5px;
-    transition: opacity 0.15s;
+    font-weight: 500;
+    color: #ffffff;
+    background: #1C1A17;
+    border: 1.5px solid #1C1A17;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
   }
-  .book-call-link:hover { opacity: 0.7; }
+  .book-call-link:hover {
+    background: #ffffff;
+    color: #1C1A17;
+  }
 
   .contact-sign {
     font-family: 'Noto Sans', sans-serif;
