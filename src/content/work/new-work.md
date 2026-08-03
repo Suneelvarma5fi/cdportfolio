@@ -6,5 +6,5 @@ thumbnail: "https://img.youtube.com/vi/4I4l0ylqru8/maxresdefault.jpg?v=20260511"
 watchLink: "https://youtu.be/4I4l0ylqru8"
 longDescription: "An AI-assisted ad made for Li.Fi Protocol centered on stablecoins. The film was developed with a hybrid workflow: concept and script iterations with AI, visual exploration and shot development through AI image/video generation, then final edit, pacing, and polish in post-production tools. The goal was to communicate clarity, speed, and cross-chain utility in a concise, story-led format that still feels native to the crypto audience."
 tools: ["Adobe Premiere Pro", "After Effects", "Claude", "Procreate"]
-order: 3
+order: 4
 ---

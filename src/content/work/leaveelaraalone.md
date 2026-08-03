@@ -15,7 +15,7 @@ btsImages:
   - "/images/bts/leaveelaraalone/hf_20260307_065554_25caa675-92d6-4e3d-82d6-9ccb7d72507c.png"
   - "/images/bts/leaveelaraalone/hf_20260310_170529_554531ac-dca2-46cd-a662-07f111b4b7ab.png"
   - "/images/bts/leaveelaraalone/hf_20260317_171854_6c6aebbf-f448-4a05-84cc-a0cdb0759335.png"
-order: 2
+order: 3
 ---
 
 ## Overview
